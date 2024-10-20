@@ -1,9 +1,19 @@
 package br.com.alura.ProjetoAlura.course;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
+import static br.com.alura.ProjetoAlura.course.StatusCourse.ACTIVE;
+
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 public class NewCourseDTO {
 
@@ -14,6 +24,7 @@ public class NewCourseDTO {
     @NotNull
     @NotBlank
     @Length(min = 4, max = 10)
+    @Pattern(regexp="[//d//s//p{Punct}]")
     private String code;
 
     private String description;
@@ -21,8 +32,13 @@ public class NewCourseDTO {
     @NotNull
     @NotBlank
     @Email
+    @ManyToOne
+    @JsonIgnoreProperties("instructorEmail")
     private String instructorEmail;
 
+    @Enumerated(EnumType.STRING)
+    private StatusCourse statusCourse;
+    
     public NewCourseDTO() {}
 
     public String getName() {
@@ -49,6 +65,7 @@ public class NewCourseDTO {
         this.description = description;
     }
 
+    
     public String getInstructorEmail() {
         return instructorEmail;
     }
@@ -56,4 +73,23 @@ public class NewCourseDTO {
     public void setInstructorEmail(String instructorEmail) {
         this.instructorEmail = instructorEmail;
     }
+
+    public Course toModel() {
+        return new Course(name, code, instructorEmail, description, ACTIVE);
+    }
+    
+    public static String codeCorrect(String code) {
+    	String regex = "[//d//s//p{Punct}]";
+    	code = code.replaceAll(regex,"-").replaceAll("-+", "-");
+    	return code;
+    }
+
+	public StatusCourse getStatusCourse() {
+		return statusCourse;
+	}
+
+	public void setStatusCourse(StatusCourse statusCourse) {
+		this.statusCourse = statusCourse;
+	}
+    
 }
