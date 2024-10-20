@@ -23,8 +23,7 @@ public class NewCourseDTO {
 
     @NotNull
     @NotBlank
-    @Length(min = 4, max = 10)
-    @Pattern(regexp="[//d//s//p{Punct}]")
+    @Length(min = 4, max = 10, message="Código do curso deve ter entre 4 as 10 caracteres")
     private String code;
 
     private String description;
@@ -75,13 +74,13 @@ public class NewCourseDTO {
     }
 
     public Course toModel() {
-        return new Course(name, code, instructorEmail, description, ACTIVE);
+        return new Course(name, codeCorrect(code), instructorEmail, description, ACTIVE);
     }
     
     public static String codeCorrect(String code) {
-    	String regex = "[//d//s//p{Punct}]";
+    	String regex = "[\\d\\s,.!?]";
     	code = code.replaceAll(regex,"-").replaceAll("-+", "-");
-    	return code;
+    	return code.toLowerCase();
     }
 
 	public StatusCourse getStatusCourse() {
