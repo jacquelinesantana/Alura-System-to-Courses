@@ -65,7 +65,7 @@ public class CourseController {
     */
     @GetMapping("/course/all")
     public List<CourseListItemDTO> listAllCourses(){
-    	return courseRepository.findAll().stream().map(CourseListItemDTO::new).toList();
+    	return courseRepository.findAllWithStudents().stream().map(CourseListItemDTO::new).toList();
     }
     
     @PutMapping("/course/{code}/inactive")
