@@ -48,7 +48,7 @@ public class NewStudentUserDTO {
     }
 
     public User toModel() {
-        return new User(name, email, STUDENT, password);
+        return new User(name, STUDENT, email,password);
     }
 
 }

@@ -10,7 +10,7 @@ class UserTest {
 
     @Test
     void password__should_be_encrypted_to_md5() {
-        User user = new User("Charles", "charles@alura.com.br", STUDENT, "mudar123");
+        User user = new User("Charles", STUDENT,"charles@alura.com.br",  "mudar123");
         assertThat(user.getPassword())
                 .isEqualTo(EncryptUtil.toMD5("mudar123"));
     }

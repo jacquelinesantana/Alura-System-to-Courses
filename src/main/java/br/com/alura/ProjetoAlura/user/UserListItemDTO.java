@@ -1,10 +1,13 @@
 package br.com.alura.ProjetoAlura.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import br.com.alura.ProjetoAlura.course.Course;
 import br.com.alura.ProjetoAlura.course.CourseListItemDTO;
 import br.com.alura.ProjetoAlura.course.NewCourseDTO;
 import jakarta.persistence.CascadeType;
@@ -19,23 +22,15 @@ public class UserListItemDTO implements Serializable {
     private String name;
     private String email;
     private Role role;
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "emailInstructor" , cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("emailInstructor")
-    @JoinColumn(name="emailInstructor")
-    private NewCourseDTO newCourseDTO; 
-    
-    @ManyToMany
-    @JoinTable(name = "courseStudents", 
-	   joinColumns = @JoinColumn(name = "userEmail"), 
-	   inverseJoinColumns = @JoinColumn(name = "courseCode"))
-    @JsonIgnoreProperties("courseStudents")
-    private List<CourseListItemDTO> courseStudents;
+    private List<String> courses;
 
     public UserListItemDTO(User user) {
         this.name = user.getName();
         this.email = user.getEmail();
         this.role = user.getRole();
+        this.courses = user.getCourses().stream()
+                .map(Course::getCode)
+                .collect(Collectors.toList());
     }
 
     public String getName() {
@@ -50,33 +45,13 @@ public class UserListItemDTO implements Serializable {
         return role;
     }
 
-	public NewCourseDTO getNewCourseDTO() {
-		return newCourseDTO;
+	public List<String> getCourses() {
+		return courses;
 	}
 
-	public void setNewCourseDTO(NewCourseDTO newCourseDTO) {
-		this.newCourseDTO = newCourseDTO;
+	public void setCourses(List<String> courses) {
+		this.courses = courses;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public List<CourseListItemDTO> getCourseStudents() {
-		return courseStudents;
-	}
-
-	public void setCourseStudents(List<CourseListItemDTO> courseStudents) {
-		this.courseStudents = courseStudents;
-	}
-    
-	
+   
 }

@@ -72,7 +72,7 @@ public class NewCourseDTO {
     public void setInstructorEmail(String instructorEmail) {
         this.instructorEmail = instructorEmail;
     }
-
+    //String name, String code, String instructorEmail, String description
     public Course toModel() {
         return new Course(name, codeCorrect(code), instructorEmail, description, ACTIVE);
     }
