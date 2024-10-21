@@ -2,6 +2,14 @@ package br.com.alura.ProjetoAlura.course;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import br.com.alura.ProjetoAlura.user.UserListItemDTO;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 
 
 
@@ -14,7 +22,19 @@ public class CourseListItemDTO implements Serializable {
     private StatusCourse statusCourse;
     private LocalDateTime inactiveDate;
     
-    public CourseListItemDTO(Course course) {
+    @ManyToMany(mappedBy="courseStudents")
+    @JsonIgnoreProperties("students")
+    private List<UserListItemDTO> students = new ArrayList<>();
+    
+    public List<UserListItemDTO> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<UserListItemDTO> students) {
+		this.students = students;
+	}
+
+	public CourseListItemDTO(Course course) {
     	this.name = course.getName();
     	this.code = course.getCode();
     	this.instructorEmail = course.getInstructorEmail();
