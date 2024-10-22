@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @GetMapping("/user/all")
-    public List<UserListItemDTO> getAllUsers() {
-        return userRepository.findAllWithCourses().stream().map(UserListItemDTO::new).collect(Collectors.toList());
+    public List<UserListItemDTO>  getAllUsers() {
+        return userRepository.findAll().stream().map(UserListItemDTO::new).collect(Collectors.toList());
     }
 
 }

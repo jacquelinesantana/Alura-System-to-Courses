@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class RegistrationController {
@@ -60,37 +61,10 @@ public class RegistrationController {
     @GetMapping("/registration/report")
     public ResponseEntity<List<RegistrationReportItem>> report() {
         
+    	List<RegistrationReportItem> userRegistration = userRepository.findCourseDetailsWithStudentCount();
     	
-    	List<RegistrationReportItem> items = new ArrayList<>();
 
-        // TODO: Implementar a Questão 4 - Relatório de Cursos Mais Acessados aqui...
-
-        // Dados fictícios abaixo que devem ser substituídos
-        items.add(new RegistrationReportItem(
-                "Java para Iniciantes",//nome curso
-                "java",//code
-                "Charles",//instructor
-                "charles@alura.com.br", //instructoremail
-                10L//total de inscrições
-        ));
-
-        items.add(new RegistrationReportItem(
-                "Spring para Iniciantes",
-                "spring",
-                "Charles",
-                "charles@alura.com.br",
-                9L
-        ));
-
-        items.add(new RegistrationReportItem(
-                "Maven para Avançados",
-                "maven",
-                "Charles",
-                "charles@alura.com.br",
-                9L
-        ));
-
-        return ResponseEntity.ok(items);
+        return ResponseEntity.ok(userRegistration);
     }
 
 }

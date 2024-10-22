@@ -16,21 +16,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
     Optional<User> findByEmail(@Param("email") String email);
+    
     //for n+1 resolution
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.courses")
-    List<User> findAllWithCourses();
-    //RegistrationReportItem(String courseName, String courseCode, String instructorName, String instructorEmail, Long totalRegistrations)
+    @Query("SELECT u FROM User u ")
+    List<RegistrationReportItem> findAllWithCourses();
     
-    /*@Query("SELECT new br.com.alura.RegistrationReportItem(c.courseName," +
-    		" c.courseCode, u.instructorName, u.instructorEmail, COUNT(r)) " +
-            "FROM Course c " +
-            "JOIN c.students u " +
-            "LEFT JOIN Register r ON c.code = r.courseCode " +
-            "WHERE c.code = :courseCode " +
-            "GROUP BY c.name, c.code, u.name, u.email"
-            + "ORDER BY COUNT(r) DESC")
-     List<RegistrationReportItem> findCourseDetailsWithStudentCount(@Param("courseCode") String courseCode);
-    */
-    
-    
+    @Query("SELECT new br.com.alura.ProjetoAlura.registration.RegistrationReportItem(c.name, c.code, "
+    		+ "(SELECT u.name FROM User u WHERE u.email = c.instructorEmail) AS name , "
+    		+ "c.instructorEmail, COUNT(u)) " +
+    	       "FROM Course c " +
+    	       "JOIN c.students u " +
+    	       
+    	       "GROUP BY c.name ORDER BY Count(u) DESC")
+    	List<RegistrationReportItem> findCourseDetailsWithStudentCount();
+ 
 }
