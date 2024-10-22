@@ -8,7 +8,8 @@ public class RegistrationReportItem {
     private final String instructorEmail;
     private final Long totalRegistrations;
 
-    public RegistrationReportItem(String courseName, String courseCode, String instructorName, String instructorEmail, Long totalRegistrations) {
+    public RegistrationReportItem(String courseName, String courseCode, 
+    		String instructorName, String instructorEmail, Long totalRegistrations) {
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.instructorName = instructorName;

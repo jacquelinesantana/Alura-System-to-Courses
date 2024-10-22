@@ -32,8 +32,8 @@ public class User {
     @ManyToMany
     @JoinTable(
         name = "register", 
-        joinColumns = @JoinColumn(name = "user_email", referencedColumnName = "email"), 
-        inverseJoinColumns = @JoinColumn(name = "course_code", referencedColumnName = "code")
+        joinColumns = @JoinColumn(name = "email_user", referencedColumnName = "email"), 
+        inverseJoinColumns = @JoinColumn(name = "code_course", referencedColumnName = "code")
     )
     @JsonIgnoreProperties("students")
     private List<Course> courses = new ArrayList<>();

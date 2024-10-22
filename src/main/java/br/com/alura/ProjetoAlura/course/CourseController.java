@@ -49,24 +49,13 @@ public class CourseController {
     	}
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    /*
-    @PutMapping("/course/{code}/inactive")
-    public ResponseEntity createCourse(@PathVariable("code") String courseCode) {
-
-        if(courseRepository.existsByCode(courseCode)) {
-        	Optional<Course> course = courseRepository.findByCode(courseCode);
-        	Course courseFinal = course.get();
-        	courseFinal .setStatusCourse(StatusCourse.INACTIVE);
-        	courseFinal.setInactiveDate(LocalDateTime.now());
-        	return ResponseEntity.status(HttpStatus.OK).body(courseRepository.save(courseFinal));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-    */
+  
     @GetMapping("/course/all")
     public List<CourseListItemDTO> listAllCourses(){
-    	return courseRepository.findAllWithStudents().stream().map(CourseListItemDTO::new).toList();
+    	return courseRepository.findAll().stream().map(CourseListItemDTO::new).toList();
     }
+    
+    
     
     @PutMapping("/course/{code}/inactive")
     public ResponseEntity inactiveCourse(@PathVariable("code") String code) {

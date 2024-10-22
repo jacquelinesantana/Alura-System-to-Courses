@@ -17,4 +17,7 @@ public interface CourseRepository extends JpaRepository<Course, Long>{
 	//for n+1 resolution
     @Query("SELECT u FROM Course u LEFT JOIN FETCH u.students")
     List<Course> findAllWithStudents();
+    
+    @Query("SELECT c FROM Course c WHERE c.statusCourse = 'ACTIVE' AND c.code = :code")
+    public Optional<Course> findByCodeAndActiveCourses(@Param("code") String code);
 }

@@ -12,7 +12,11 @@ import br.com.alura.ProjetoAlura.course.Course;
 import br.com.alura.ProjetoAlura.course.CourseRepository;
 import br.com.alura.ProjetoAlura.user.User;
 import br.com.alura.ProjetoAlura.user.UserRepository;
+import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 
+import static br.com.alura.ProjetoAlura.course.StatusCourse.ACTIVE;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,22 +33,23 @@ public class RegistrationController {
 
     @PostMapping("/registration/new")
     public ResponseEntity createCourse(@Valid @RequestBody NewRegistrationDTO newRegistration) {
-        Optional<User> user = userRepository.findByEmail(newRegistration.getStudentEmail());
-        Optional<Course> course = courseRepository.findByCode(newRegistration.getCourseCode());
+    	LocalDate registrationDate = LocalDate.now();
+    	Optional<User> user = userRepository.findByEmail(newRegistration.getStudentEmail());
+        Optional<Course> course = courseRepository.findByCodeAndActiveCourses(newRegistration.getCourseCode());
         
         if(user.isPresent() && course.isPresent()) {
         	Course courseX = course.get();
+        	
         	User userX = user.get();
         	
         	if(userX.getCourses().contains(courseX)) {
         		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error, This student already belongs to this course.");
         	}
-        	
+        	//newRegistration.setEnrollment_date(registrationDate);
         	userX.getCourses().add(courseX);
-        	
-        	userRepository.save(userX);
+        	;
         	 
-        	return ResponseEntity.status(HttpStatus.CREATED).build();
+        	return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userX));
         	
         }
         
@@ -52,43 +57,21 @@ public class RegistrationController {
         
     }
     
-    /*
-     * @PostMapping("/add")
-    public ResponseEntity<String> enrollStudent(@RequestBody EnrollRequestDTO enrollRequest) {
-        Optional<User> userOpt = userRepository.findByEmail(enrollRequest.getEmailUser());
-        Optional<Course> courseOpt = courseRepository.findByCode(enrollRequest.getCodeCourse());
-
-        if (userOpt.isPresent() && courseOpt.isPresent()) {
-            User user = userOpt.get();
-            Course course = courseOpt.get();
-            
-            // Adiciona o curso na lista de cursos do aluno
-            user.getCourses().add(course);
-            
-            // Salva a relação
-            userRepository.save(user);
-
-            return ResponseEntity.ok("Student enrolled successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User or Course not found");
-        }
-    }
-     */
-
     @GetMapping("/registration/report")
     public ResponseEntity<List<RegistrationReportItem>> report() {
-        List<RegistrationReportItem> items = new ArrayList<>();
+        
+    	
+    	List<RegistrationReportItem> items = new ArrayList<>();
 
         // TODO: Implementar a Questão 4 - Relatório de Cursos Mais Acessados aqui...
 
         // Dados fictícios abaixo que devem ser substituídos
         items.add(new RegistrationReportItem(
-                "Java para Iniciantes",
-                "java",
-                "Charles",
-                "charles@alura.com.br",
-                10L
+                "Java para Iniciantes",//nome curso
+                "java",//code
+                "Charles",//instructor
+                "charles@alura.com.br", //instructoremail
+                10L//total de inscrições
         ));
 
         items.add(new RegistrationReportItem(

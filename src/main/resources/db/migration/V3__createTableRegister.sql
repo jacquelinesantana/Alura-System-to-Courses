@@ -1,6 +1,7 @@
 CREATE TABLE register (
     email_user VARCHAR(255) NOT NULL,
     code_course VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Campo para data de criação com valor padrão
     PRIMARY KEY (email_user, code_course),
     CONSTRAINT fk_user
         FOREIGN KEY (email_user) REFERENCES user(email)
